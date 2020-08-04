@@ -10,22 +10,14 @@ def index(request):
         "entries": util.list_entries()
     })
     
-def css(request):
-    html = markdown_path("entries/css.md")
-    return HttpResponse(html)
-    
-def GetEntry(request, title):
-    text = util.get_entry(title)
+def GetEntry(request, entry):
+    text = util.get_entry(entry)
     if text is None:
         html = markdown_path("encyclopedia/templates/encyclopedia/Not Found.md")
-        return render(request, "encyclopedia/notFound.html", {"html": html, "title": title})
+        return render(request, "encyclopedia/notFound.html", {"html": html, "entry": entry})
     else:
         html = markdown(text)
-        return render(request, "encyclopedia/entry.html", {"html": html, "title": title})
+        return render(request, "encyclopedia/entry.html", {"html": html, "entry": entry})
 
 
-def entry(request, title):
-    entryPath = "entries/"+title+".md"
-    html = markdown_path("entries/"+title+".md")
-    return HttpResponse({html})
     
