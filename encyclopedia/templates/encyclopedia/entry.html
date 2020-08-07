@@ -1,9 +1,11 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    {{entry|safe}}
+    {{title|safe}}
 {% endblock %}
 
 {% block body %}
 	{{html|safe}}
+	<p>
+	<a href="{% url 'encyclopedia:index' %}"> Back to TOC </a>
 {% endblock %}
