@@ -6,6 +6,7 @@ app_name = 'encyclopedia'
 urlpatterns = [
     path("", views.index, name="index"),
     path("newentry", views.newentry, name = "newentry"),
-    path("<str:entry>", views.GetEntry, name = "entry")
+    path("editentry/<str:entry>", views.editentry, name = "editentry"),
+    path("<str:entry>", views.GetEntry, name = "getentry")
  ]
 

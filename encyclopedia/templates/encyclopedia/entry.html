@@ -1,11 +1,11 @@
-{% extends "encyclopedia/layout.html" %}
+
 
 {% block title %}
-    {{title|safe}}
+    {{entry|safe}}
 {% endblock %}
 
 {% block body %}
 	{{html|safe}}
 	<p>
-	<a href="{% url 'encyclopedia:index' %}"> Back to TOC </a>
+	<a href="{% url 'encyclopedia:editentry' entry=entry %}"> Edit This Entry: {{entry|safe}} </a>
 {% endblock %}

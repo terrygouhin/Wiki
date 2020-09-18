@@ -6,8 +6,12 @@ from django.core.files import File
 from . import util
 
 class NewEntryForm(forms.Form):
-    title =  forms.CharField(label="New Entry Title")
-    mdText = forms.CharField(widget=forms.Textarea(attrs={'id':'mdText', 'name':'mdText', 'rows':'5', 'cols':'25'})) 
+    title =  forms.CharField(label="Entry Title")
+    mdText = forms.CharField(widget=forms.Textarea(attrs={'id':'mdText', 'name':'mdText'})) 
+
+class EditEntryForm(forms.Form):
+    entry =  forms.CharField(label="Entry Title")
+    content = forms.CharField(widget=forms.Textarea(attrs={'id':'editText', 'name':'editText', 'value':'content'})) 
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -27,12 +31,9 @@ def newentry(request):
     if request.method=="POST":
         form = NewEntryForm(request.POST)
         if form.is_valid():
-            NewEntry = form.cleaned_data["mdText"]
+            content = form.cleaned_data["mdText"]
             title = form.cleaned_data["title"]
-            filename='entries/'+title+'.md'
-            f = open(filename, 'w+')
-            f.write(NewEntry)
-            f.close()
+            util.save_entry(title, content)
         else:
             return render(request, "encyclopedia/NewEntry.html", {
                 "form":form
@@ -42,5 +43,25 @@ def newentry(request):
         "form": NewEntryForm()
     })
 
+def dispentry(request, entry):
+    text = util.get_entry(entry)
+    return render(request, "encyclopedia/editEntry2.html", {"entry": entry})
+    if request.method =="POST":
+        if form.is_valid():
+            content = form.cleaned_data["editText"]
+            title = form.cleaned_data["entry"]
+            util.save_entry(title, content)
+        else:
+            return HttpResponse ("Invalid data")  
+    data = {"title":"{{entry}}", "content":"mycontent"}        
+
+def editentry(request, entry):
+    content = util.get_entry(entry)
+    data = {'entry':entry, 'content':content}
+    form = EditEntryForm(data, initial=data)
+    
+    return render(request, "encyclopedia/editEntry.html", {
+        "form":form, "entry":entry
+    })
 
     
